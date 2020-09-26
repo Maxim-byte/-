@@ -159,7 +159,7 @@ public class Main {
     public static void main(final String[] arg) {
         final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         try (final PrintWriter out = new PrintWriter(System.out)) {
-            //solve1(in, out);
+            solve1(in, out);
             solve2(out);
             solve3(in, out);
             solve4(in, out);
