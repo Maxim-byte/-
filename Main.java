@@ -1,3 +1,5 @@
+package com.company;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,7 +20,7 @@ public class Main {
         }
     }
 
-    private static ArrayList<Integer> readArray(final BufferedReader in) throws IOException {
+    private static ArrayList<Integer> readArray(final BufferedReader in) throws IOException, StringIndexOutOfBoundsException {
         String str = in.readLine();
         var array = new ArrayList<Integer>();
         var digit = new StringBuilder();
@@ -39,11 +41,13 @@ public class Main {
         return array;
     }
 
-    private static void solve1(final BufferedReader in, final PrintWriter out) throws IOException {
+    private static void solve1(final BufferedReader in, final PrintWriter out) throws IOException, NullPointerException, IndexOutOfBoundsException {
         out.write("Solve 1\n");
         out.flush();
         ArrayList<Integer> array = readArray(in);
-        assert array != null;
+        if (array == null) {
+            throw new NullPointerException();
+        }
 
         out.write("Array: " + array.toString() + '\n');
 
@@ -64,24 +68,48 @@ public class Main {
         out.write("Sorted: " + array.toString() + '\n');
     }
 
-     private static void solve2(final PrintWriter out) throws IOException {
+    private static void solve2(final PrintWriter out) throws IOException {
 
-         Integer[] intArray = new Integer[(int)(Math.random() * 100) + 1];
-         for(int i = 0; i < intArray.length; ++i) {
-             intArray[i] = (int)(Math.random() * 100);
-         }
-         List<Integer> intList = Arrays.asList(intArray);
-         Collections.shuffle(intList);
+        Integer[] intArray = new Integer[(int) (Math.random() * 100) + 1];
+        for (int i = 0; i < intArray.length; ++i) {
+            intArray[i] = (int) (Math.random() * 100);
+        }
+        int[] arrayOfIndex = new int[intArray.length];
+        for (int i = 0; i < arrayOfIndex.length; i++) {
+            arrayOfIndex[i] = (int) (Math.random() * arrayOfIndex.length);
+            boolean isUnique = false;
+            while (!isUnique) {
+                if (arrayOfIndex[i] == i) {
+                    arrayOfIndex[i] = (int) (Math.random() * arrayOfIndex.length);
+                    continue;
+                }
+                int j;
+                for (j = 0; j < i; j++) {
+                    if (arrayOfIndex[i] == arrayOfIndex[j]) {
+                        arrayOfIndex[i] = (int) (Math.random() * arrayOfIndex.length);
+                        break;
+                    }
+                }
+                if (j == i) {
+                    isUnique = true;
+                }
+            }
+        }
+        int[] temp = new int[intArray.length];
+        System.arraycopy(intArray, 0, temp, 0, intArray.length);
+        for (int i = 0; i < intArray.length; i++) {
+            intArray[i] = temp[arrayOfIndex[i]];
+        }
+        out.write(Arrays.toString(intArray) + '\n');
+    }
 
-         intList.toArray(intArray);
-         out.write(Arrays.toString(intArray) + '\n');
-     }
-
-    private static void solve3(final BufferedReader in, final PrintWriter out) throws IOException {
+    private static void solve3(final BufferedReader in, final PrintWriter out) throws IOException, NullPointerException {
         out.write("Solve 3\n");
         out.flush();
         ArrayList<Integer> array = readArray(in);
-        assert array != null;
+        if (array == null) {
+            throw new NullPointerException();
+        }
         int count = 0;
         Set<Integer> set = new HashSet<>(array);
         out.write("Unique count:" + set.size() + '\n');
@@ -90,15 +118,28 @@ public class Main {
     private static void solve4(final BufferedReader in, final PrintWriter out) throws IOException {
         out.write("Solve 4\n");
         out.flush();
+        boolean flag = false;
         try {
             int size = Integer.parseInt(in.readLine());
             int size1 = Integer.parseInt(in.readLine());
             double[][] matrix = new double[size][size1];
-            for (int i = 0; i < size; ++i) {
-                for (int j = 0; j < size1; ++j) {
-                    matrix[i][j] = (double) (i + 1) / size1;
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < i + 1; j++) {
+                    if (j >= size1) {
+                        continue;
+                    }
+                    if(flag) {
+                        continue;
+                    }
+                    if (i >= size1) {
+                        matrix[i][j] = i + 1;
+                        flag = true;
+                        continue;
+                    }
+                    matrix[i][j] = 1;
                 }
-            }
+                flag = false;
+                }
             print(out, size, size1, matrix);
         } catch (NumberFormatException e) {
             e.printStackTrace();
@@ -116,35 +157,38 @@ public class Main {
 
         out.write("Size = " + size + "\nSize1 = " + size1 + "\n");
         double[][] matrix = new double[size][size1];
+        double minFromMax = matrix[0][0];
 
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size1; ++j) {
                 matrix[i][j] = (double) (Math.random() * 10);
-                if(matrix[i][j] > max) {
+                if (matrix[i][j] > max) {
                     max = matrix[i][j];
-                    place = i;
                 }
+            }
+            if (minFromMax > max) {
+                place = i;
+                minFromMax = max;
             }
         }
 
         out.write("Matrix\n");
 
-       print(out, size, size1, matrix);
+        print(out, size, size1, matrix);
 
 
         double[][] newMatrix = new double[size - 1][size1];
         boolean flag = false;
 
         for (int i = 0; i < size; ++i) {
-            if(place == i) {
+            if (place == i) {
                 flag = true;
                 continue;
             }
             for (int j = 0; j < size1; ++j) {
-                if(flag) {
+                if (flag) {
                     newMatrix[i - 1][j] = matrix[i][j];
-                } else
-                {
+                } else {
                     newMatrix[i][j] = matrix[i][j];
                 }
             }
@@ -153,18 +197,18 @@ public class Main {
 
         out.write("\nNewMatrix\n");
 
-       print(out, size - 1, size1, newMatrix);
+        print(out, size - 1, size1, newMatrix);
     }
 
     public static void main(final String[] arg) {
         final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         try (final PrintWriter out = new PrintWriter(System.out)) {
             //solve1(in, out);
-            solve2(out);
-            solve3(in, out);
+            //solve2(out);
+            //solve3(in, out);
             solve4(in, out);
-            solve5(out);
-        } catch (IOException e) {
+            //solve5(out);
+        } catch (IOException | NullPointerException | IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }
