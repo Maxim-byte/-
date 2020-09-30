@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.function.DoubleUnaryOperator;
 
 public class Main {
     private Main() {
@@ -157,11 +158,24 @@ public class Main {
 
         out.write("Size = " + size + "\nSize1 = " + size1 + "\n");
         double[][] matrix = new double[size][size1];
-        double minFromMax = matrix[0][0];
+        double minFromMax;
 
-        for (int i = 0; i < size; ++i) {
+        for (int i = 0; i < 1; ++i) {
             for (int j = 0; j < size1; ++j) {
-                matrix[i][j] = (double) (Math.random() * 10);
+                matrix[i][j] = (Math.random() * 10);
+                if (matrix[i][j] > max) {
+                    max = matrix[i][j];
+                }
+            }
+        }
+
+
+        minFromMax = max;
+
+
+        for (int i = 1; i < size; ++i) {
+            for (int j = 0; j < size1; ++j) {
+                matrix[i][j] = (Math.random() * 10);
                 if (matrix[i][j] > max) {
                     max = matrix[i][j];
                 }
@@ -170,6 +184,7 @@ public class Main {
                 place = i;
                 minFromMax = max;
             }
+            max = Double.MIN_VALUE;
         }
 
         out.write("Matrix\n");
@@ -203,11 +218,11 @@ public class Main {
     public static void main(final String[] arg) {
         final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         try (final PrintWriter out = new PrintWriter(System.out)) {
-            //solve1(in, out);
-            //solve2(out);
-            //solve3(in, out);
+            solve1(in, out);
+            solve2(out);
+            solve3(in, out);
             solve4(in, out);
-            //solve5(out);
+            solve5(out);
         } catch (IOException | NullPointerException | IndexOutOfBoundsException e) {
             e.printStackTrace();
         }
