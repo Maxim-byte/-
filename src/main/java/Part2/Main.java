@@ -19,18 +19,18 @@ public class Main {
             }
         }
         if (oneSecond) {
-            if (digit == 1) {
+            if (Math.abs(digit) == 1) {
                 return result + "одна";
             }
             return result + "две";
         }
-        result += digits[digit];
+        result += digits[Math.abs(digit)];
         return result;
     }
 
     static private String getDozens(Integer num, boolean oneSecond) {
         if(num < 10) {
-            return getDigit(num, false, false);
+            return getDigit(Math.abs(num), false, false);
         }
         String result = "";
         if (num == 0) {
@@ -39,7 +39,7 @@ public class Main {
         String[] ten = {"десять", "одинадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
                 "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"};
         String[] dozen = {"двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят",
-                "девяноста"};
+                "девяносто"};
         if ((Math.abs(num) >= 10 && Math.abs(num) < 20)) {
             return (result = ten[Math.abs(num) % 10]);
         }
@@ -59,33 +59,33 @@ public class Main {
     static private String getThousand(Integer num, boolean oneSecond) {
         String result = "";
         if (Math.abs(num) / 1000 == 1) {
-            return result += "одна тысяча " + getHundreds(num % 1000, oneSecond);
+            return result += "одна тысяча " + getHundreds(Math.abs(num) % 1000, oneSecond);
         } else if (Math.abs(num) / 1000 == 2) {
-            return result += "две тысячи " + getHundreds(num % 1000, oneSecond);
+            return result += "две тысячи " + getHundreds(Math.abs(num) % 1000, oneSecond);
         } else if (Math.abs(num) / 1000 == 3) {
-            return result += "три тысячи " + getHundreds(num % 1000, oneSecond);
+            return result += "три тысячи " + getHundreds(Math.abs(num) % 1000, oneSecond);
         } else if (Math.abs(num) / 1000 == 4) {
-            return result += "четыре тысячи " + getHundreds(num % 1000, oneSecond);
+            return result += "четыре тысячи " + getHundreds(Math.abs(num) % 1000, oneSecond);
         } else if (Math.abs(num) / 10000 == 0) {
-            return result += getDigit(Math.abs(num) / 1000, false, oneSecond) + " тысячь " + getHundreds(num % 1000, oneSecond);
+            return result += getDigit(Math.abs(num) / 1000, false, oneSecond) + " тысячь " + getHundreds(Math.abs(num) % 1000, oneSecond);
         }
-        return result += getDigit(Math.abs(num) / 10000, false, oneSecond) + " тысячь " + getHundreds(num % 10000, oneSecond);
+        return result += getDigit(Math.abs(num) / 10000, false, oneSecond) + " тысячь " + getHundreds(Math.abs(num) % 10000, oneSecond);
     }
 
     static private String getDozenThousand(Integer num) {
         String result = "";
         if (Math.abs(num) / 1000 % 10 == 0) {
-            return result += getDozens(num / 1000, false) + " тысяч " + getHundreds(num % 1000, false);
+            return result += getDozens(num / 1000, false) + " тысяч " + getHundreds(Math.abs(num) % 1000, false);
         } else if (Math.abs(num) / 1000 % 10 == 1) {
-            return result += getDozens(num / 1000, true) + " тысячa " + getHundreds(num % 1000, false);
+            return result += getDozens(num / 1000, true) + " тысячa " + getHundreds(Math.abs(num) % 1000, false);
         } else if (Math.abs(num) / 1000 % 10 == 2) {
-            return result += getDozens(num / 1000, true) + " тысячи " + getHundreds(num % 1000, false);
+            return result += getDozens(num / 1000, true) + " тысячи " + getHundreds(Math.abs(num) % 1000, false);
         } else if (Math.abs(num) / 1000 % 10 == 3) {
-            return result += getDozens(num / 1000, false) + " тысячи " + getHundreds(num % 1000, false);
+            return result += getDozens(num / 1000, false) + " тысячи " + getHundreds(Math.abs(num) % 1000, false);
         } else if (Math.abs(num) / 1000 % 10 == 4) {
-            return result += getDozens(num / 1000, false) + " тысячи " + getHundreds(num % 1000, false);
+            return result += getDozens(num / 1000, false) + " тысячи " + getHundreds(Math.abs(num) % 1000, false);
         }
-        return result += getDozens(num / 1000, false) + " тысяч " + getHundreds(num % 1000, false);
+        return result += getDozens(Math.abs(num) / 1000, false) + " тысяч " + getHundreds(Math.abs(num) % 1000, false);
     }
 
     static private void task1(BufferedReader in, PrintWriter out) throws IOException {
@@ -95,20 +95,21 @@ public class Main {
         String result = "";
         if (Math.abs(number) <= 10) {
             result += getDigit(number, true, false);
-            out.write(result + '\n');
         } else if (Math.abs(number) >= 11 && Math.abs(number) < 100) {
             result = getDozens(number, false);
-            out.write(result + '\n');
         } else if (Math.abs(number) >= 100 && Math.abs(number) < 1000) {
             result = getHundreds(number, false);
-            out.write(result + '\n');
         } else if (Math.abs(number) >= 1000 && Math.abs(number) < 10000) {
             result = getThousand(number, false);
-            out.write(result + '\n');
         } else if (Math.abs(number) >= 10000 && Math.abs(number) < 100000) {
             result = getDozenThousand(number);
-            out.write(result + '\n');
-        } //по аналогии до бесконечночти, но смысла нет, лишь писать много...Надеюсь до 100к хватит...
+        }
+        StringBuilder builder = new StringBuilder();
+        if(number < 0) {
+            builder.append("минус ");
+        }
+        out.write(builder.append(result).toString() + '\n');
+        //по аналогии до бесконечночти, но смысла нет, лишь писать много...Надеюсь до 100к хватит...
     }
 
     static private void task2(FileReader fin, PrintWriter out) throws
