@@ -10,7 +10,109 @@ public class Main {
         // Should not be instantiated
     }
 
-    static private void task2(FileReader fin, PrintWriter out) throws IOException, IndexOutOfBoundsException, NullPointerException,
+    static private String getDigit(Integer digit, boolean isOneDigit, boolean oneSecond) {
+        String[] digits = {"ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять"};
+        String result = "";
+        if (digit == 0) {
+            if (!isOneDigit) {
+                return result;
+            }
+        }
+        if (oneSecond) {
+            if (digit == 1) {
+                return result + "одна";
+            }
+            return result + "две";
+        }
+        result += digits[digit];
+        return result;
+    }
+
+    static private String getDozens(Integer num, boolean oneSecond) {
+        if(num < 10) {
+            return getDigit(num, false, false);
+        }
+        String result = "";
+        if (num == 0) {
+            return result;
+        }
+        String[] ten = {"десять", "одинадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать",
+                "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"};
+        String[] dozen = {"двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят",
+                "девяноста"};
+        if ((Math.abs(num) >= 10 && Math.abs(num) < 20)) {
+            return (result = ten[Math.abs(num) % 10]);
+        }
+        return (result += dozen[(Math.abs(num) / 10) - 2] + ' ' + getDigit(Math.abs(num % 10), false, oneSecond));
+    }
+
+    static private String getHundreds(Integer num, boolean OneSecond) {
+        String result = "";
+        if (num == 0) {
+            return result;
+        }
+        String[] hundreds = {"сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"};
+        result += hundreds[Math.abs(num) / 100 - 1] + ' ' + getDozens(Math.abs(num) % 100, OneSecond);
+        return result;
+    }
+
+    static private String getThousand(Integer num, boolean oneSecond) {
+        String result = "";
+        if (Math.abs(num) / 1000 == 1) {
+            return result += "одна тысяча " + getHundreds(num % 1000, oneSecond);
+        } else if (Math.abs(num) / 1000 == 2) {
+            return result += "две тысячи " + getHundreds(num % 1000, oneSecond);
+        } else if (Math.abs(num) / 1000 == 3) {
+            return result += "три тысячи " + getHundreds(num % 1000, oneSecond);
+        } else if (Math.abs(num) / 1000 == 4) {
+            return result += "четыре тысячи " + getHundreds(num % 1000, oneSecond);
+        } else if (Math.abs(num) / 10000 == 0) {
+            return result += getDigit(Math.abs(num) / 1000, false, oneSecond) + " тысячь " + getHundreds(num % 1000, oneSecond);
+        }
+        return result += getDigit(Math.abs(num) / 10000, false, oneSecond) + " тысячь " + getHundreds(num % 10000, oneSecond);
+    }
+
+    static private String getDozenThousand(Integer num) {
+        String result = "";
+        if (Math.abs(num) / 1000 % 10 == 0) {
+            return result += getDozens(num / 1000, false) + " тысяч " + getHundreds(num % 1000, false);
+        } else if (Math.abs(num) / 1000 % 10 == 1) {
+            return result += getDozens(num / 1000, true) + " тысячa " + getHundreds(num % 1000, false);
+        } else if (Math.abs(num) / 1000 % 10 == 2) {
+            return result += getDozens(num / 1000, true) + " тысячи " + getHundreds(num % 1000, false);
+        } else if (Math.abs(num) / 1000 % 10 == 3) {
+            return result += getDozens(num / 1000, false) + " тысячи " + getHundreds(num % 1000, false);
+        } else if (Math.abs(num) / 1000 % 10 == 4) {
+            return result += getDozens(num / 1000, false) + " тысячи " + getHundreds(num % 1000, false);
+        }
+        return result += getDozens(num / 1000, false) + " тысяч " + getHundreds(num % 1000, false);
+    }
+
+    static private void task1(BufferedReader in, PrintWriter out) throws IOException {
+        out.write("Task1\n");
+        out.flush();
+        int number = Integer.parseInt(in.readLine());
+        String result = "";
+        if (Math.abs(number) <= 10) {
+            result += getDigit(number, true, false);
+            out.write(result + '\n');
+        } else if (Math.abs(number) >= 11 && Math.abs(number) < 100) {
+            result = getDozens(number, false);
+            out.write(result + '\n');
+        } else if (Math.abs(number) >= 100 && Math.abs(number) < 1000) {
+            result = getHundreds(number, false);
+            out.write(result + '\n');
+        } else if (Math.abs(number) >= 1000 && Math.abs(number) < 10000) {
+            result = getThousand(number, false);
+            out.write(result + '\n');
+        } else if (Math.abs(number) >= 10000 && Math.abs(number) < 100000) {
+            result = getDozenThousand(number);
+            out.write(result + '\n');
+        } //по аналогии до бесконечночти, но смысла нет, лишь писать много...Надеюсь до 100к хватит...
+    }
+
+    static private void task2(FileReader fin, PrintWriter out) throws
+            IOException, IndexOutOfBoundsException, NullPointerException,
             UnsupportedOperationException, ClassCastException, IllegalArgumentException {
         out.write("Task2\n");
         out.flush();
@@ -87,9 +189,9 @@ public class Main {
             currentIndex -= 3;
         }
         StringBuilder builder = new StringBuilder("");
-        for(int i = 0; i < array.size(); ++i) {
-            if(array.get(i).length() == 3) {
-                char ch = (char)(Math.random() * 65536);
+        for (int i = 0; i < array.size(); ++i) {
+            if (array.get(i).length() == 3) {
+                char ch = (char) (Math.random() * 65536);
                 builder.append(array.get(i).charAt(0)).append(ch).append(array.get(i).charAt(2));
                 array.set(i, builder.toString());
                 builder.setLength(0);
@@ -104,19 +206,30 @@ public class Main {
         final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         try (final PrintWriter out = new PrintWriter(System.out)) {
             final FileReader fin = new FileReader(new File("/Users/gvgromov/lab2.oop.java/src/main/resources/test"));
-            task2(fin, out);
-            task4(in, out);
-            task5(in, out);
-        } catch (IOException e) {
+            task1(in, out);
+            //task2(fin, out);
+            //task4(in, out);
+            //task5(in, out);
+            fin.close();
+        } catch (IOException | IndexOutOfBoundsException | NullPointerException | ClassCastException | IllegalArgumentException |
+                UnsupportedOperationException e) {
             e.printStackTrace();
         } finally {
             try {
                 in.close();
-            } catch (IOException | IndexOutOfBoundsException | NullPointerException | ClassCastException | IllegalArgumentException |
-                    UnsupportedOperationException exception) {
+            } catch (IOException exception) {
 
                 exception.printStackTrace();
             }
+        }
+        Triangle.Point a = new Triangle.Point(1, 0);
+        Triangle.Point b = new Triangle.Point(100, 23);
+        Triangle.Point c = new Triangle.Point(1100, 100);
+        try {
+            Triangle tr = new Triangle(a, b, c);
+            System.out.println(tr.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
