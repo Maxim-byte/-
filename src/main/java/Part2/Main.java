@@ -193,6 +193,10 @@ public class Main {
         for (int i = 0; i < array.size(); ++i) {
             if (array.get(i).length() == 3) {
                 char ch = (char) (Math.random() * 65536);
+                while(ch != array.get(i).charAt(0) && ch != array.get(i).charAt(2))
+                {
+                    ch = (char) (Math.random() * 65536);
+                }
                 builder.append(array.get(i).charAt(0)).append(ch).append(array.get(i).charAt(2));
                 array.set(i, builder.toString());
                 builder.setLength(0);
