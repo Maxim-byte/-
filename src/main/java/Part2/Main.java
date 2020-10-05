@@ -193,7 +193,7 @@ public class Main {
         for (int i = 0; i < array.size(); ++i) {
             if (array.get(i).length() == 3) {
                 char ch = (char) (Math.random() * 65536);
-                while(ch != array.get(i).charAt(0) && ch != array.get(i).charAt(2))
+                while(ch == array.get(i).charAt(0) && ch == array.get(i).charAt(2))
                 {
                     ch = (char) (Math.random() * 65536);
                 }
@@ -211,10 +211,10 @@ public class Main {
         final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         try (final PrintWriter out = new PrintWriter(System.out)) {
             final FileReader fin = new FileReader(new File("/Users/gvgromov/lab2.oop.java/src/main/resources/test"));
-            task1(in, out);
+            //task1(in, out);
             //task2(fin, out);
             //task4(in, out);
-            //task5(in, out);
+            task5(in, out);
             fin.close();
         } catch (IOException | IndexOutOfBoundsException | NullPointerException | ClassCastException | IllegalArgumentException |
                 UnsupportedOperationException e) {
