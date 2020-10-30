@@ -211,9 +211,9 @@ public class Main {
         final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         try (final PrintWriter out = new PrintWriter(System.out)) {
             final FileReader fin = new FileReader(new File("/Users/gvgromov/lab2.oop.java/src/main/resources/test"));
-            //task1(in, out);
-            //task2(fin, out);
-            //task4(in, out);
+            task1(in, out);
+            task2(fin, out);
+            task4(in, out);
             task5(in, out);
             fin.close();
         } catch (IOException | IndexOutOfBoundsException | NullPointerException | ClassCastException | IllegalArgumentException |
