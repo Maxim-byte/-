@@ -44,7 +44,7 @@ public class Part4 {
         }
     }
 
-    private static Map<Integer, String> swapKeyValueMap(Map<String, Integer> map) {
+    private static <K, V> Map<V, K> swapKeyValueMap(Map<K, V> map) {
         return map.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
     }
