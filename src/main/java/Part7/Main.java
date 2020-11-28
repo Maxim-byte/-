@@ -1,7 +1,5 @@
-package Task8;
+package Part7;
 
-
-import com.google.common.base.Functions;
 
 import java.util.*;
 import java.util.stream.Collectors;

@@ -3,7 +3,7 @@ package Part4;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Part4 {
+public class Main {
 
     private static final String englishSymbols = "abcdefghijklmnopqrstuvwxyz";
 
